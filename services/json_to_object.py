@@ -25,7 +25,7 @@ class JSONToDartObject:
         self.generatedCode += "import 'dart:convert';\n\n"
 
     def declareClass(self, className):
-        self.generatedCode += f"class {className.capitalize()} {{\n"
+        self.generatedCode += f"class {className[0].upper() + className[1:]} {{\n"
 
     def createVariables(self, jsonReceived):
         for key, value in jsonReceived.items():
@@ -41,7 +41,7 @@ class JSONToDartObject:
                 self.generatedCode += f"  final bool {key[0].lower() + key[1:]};\n"
 
     def createConstructor(self, className, fields):
-        self.generatedCode += f"\n  const {className.capitalize()} ({{\n"
+        self.generatedCode += f"\n  const {className[0].upper() + className[1:]} ({{\n"
 
         for key in fields:
             self.generatedCode += f"    required this.{key[0].lower() + key[1:]},\n"
@@ -49,26 +49,24 @@ class JSONToDartObject:
         self.generatedCode += "  });\n\n"
 
     def createFromJson(self, className):
-        self.generatedCode += f"  factory {className.capitalize()}.fromJson(String source) => {className.capitalize()}.fromMap(json.decode(source));\n"
+        self.generatedCode += f"  factory {className[0].upper() + className[1:]}.fromJson(String source) => {className[0].upper() + className[1:]}.fromMap(json.decode(source));\n"
         self.generatedCode += "}\n\n"
 
     def createFromMap(self, className, fields, isList=False):
         if isList:
-            self.generatedCode += (
-                f"  factory {className.capitalize()}.fromMap(List list) {{\n"
-            )
+            self.generatedCode += f"  factory {className[0].upper() + className[1:]}.fromMap(List list) {{\n"
         else:
-            self.generatedCode += f"  factory {className.capitalize()}.fromMap(Map<String, dynamic> map) {{\n"
-        self.generatedCode += f"    return {className.capitalize()}(\n"
+            self.generatedCode += f"  factory {className[0].upper() + className[1:]}.fromMap(Map<String, dynamic> map) {{\n"
+        self.generatedCode += f"    return {className[0].upper() + className[1:]}(\n"
 
         for key, value in fields.items():
             if type(value) is dict:
-                self.generatedCode += f"      {key[0].lower() + key[1:]}: {key.capitalize()}.fromMap(map['{key}']),\n"
+                self.generatedCode += f"      {key[0].lower() + key[1:]}: {key[0].upper() + key[1:]}.fromMap(map['{key}']),\n"
             elif type(value) is list:
                 if isList:
-                    self.generatedCode += f"      {key[0].lower() + key[1:]}: (list as List).map((e) => {key.capitalize()}.fromMap(e)).toList(),\n"
+                    self.generatedCode += f"      {key[0].lower() + key[1:]}: list.map((e) => {key[0].upper() + key[1:]}.fromMap(e)).toList(),\n"
                 else:
-                    self.generatedCode += f"      {key[0].lower() + key[1:]}: (map['{key}'] as List).map((e) => {key.capitalize()}.fromMap(e)).toList(),\n"
+                    self.generatedCode += f"      {key[0].lower() + key[1:]}: (map['{key}'] as List).map((e) => {key[0].upper() + key[1:]}.fromMap(e)).toList(),\n"
             elif type(value) is str:
                 self.generatedCode += (
                     f"      {key[0].lower() + key[1:]}: map['{key}'] ?? '',\n"
@@ -91,9 +89,9 @@ class JSONToDartObject:
         self.generatedCode += f"    final result = <String, dynamic>{{}};\n\n"
 
         for key, value in fields.items():
-            self.generatedCode += f"    result.addAll({{'{key[0].lower() + key[1:]}': {key[0].lower() + key[1:]}}});\n\n"
+            self.generatedCode += f"    result.addAll({{'{key[0].lower() + key[1:]}': {key[0].lower() + key[1:]}}});\n"
 
-        self.generatedCode += "    return result;\n"
+        self.generatedCode += "\n    return result;\n"
         self.generatedCode += "  }\n\n"
 
     def createToJson(self, className, fields):
@@ -114,14 +112,14 @@ class JSONToDartObject:
 
     def handleMap(self, key, value):
         self.generatedCode += (
-            f"  final {key.capitalize()} {key[0].lower() + key[1:]};\n"
+            f"  final {key[0].upper() + key[1:]} {key[0].lower() + key[1:]};\n"
         )
 
         self.codeToBeGeneratedLater.append({key: value})
 
     def handleList(self, key, value):
         self.generatedCode += (
-            f"  final List<{key.capitalize()}> {key[0].lower() + key[1:]};\n"
+            f"  final List<{key[0].upper() + key[1:]}> {key[0].lower() + key[1:]};\n"
         )
 
         self.codeToBeGeneratedLater.append({key: value})

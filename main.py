@@ -25,14 +25,3 @@ def jsonParserForDict(className: str, json: dict, isList: bool = False):
 
 
 onlyTypesJson = {"name": "Nitin", "age": 21, "email": "nitin@gmail.com"}
-
-someRandomJson = {
-    "House": {
-        "People": [
-            {"name": "Nitin", "email": "nitin@gmail.com"},
-            {"name": "Nitin2", "email": "nitin2@gmail.com"},
-        ],
-        "area": "Bhayandar",
-        "landmark": "police station",
-    }
-}
