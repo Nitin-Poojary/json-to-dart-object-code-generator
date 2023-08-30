@@ -89,7 +89,9 @@ class JSONToDartObject:
         self.generatedCode += f"    final result = <String, dynamic>{{}};\n\n"
 
         for key, value in fields.items():
-            self.generatedCode += f"    result.addAll({{'{key[0].lower() + key[1:]}': {key[0].lower() + key[1:]}}});\n"
+            self.generatedCode += (
+                f"    result.addAll({{'{key}': {key[0].lower() + key[1:]}}});\n"
+            )
 
         self.generatedCode += "\n    return result;\n"
         self.generatedCode += "  }\n\n"
